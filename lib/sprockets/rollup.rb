@@ -61,7 +61,7 @@ module Sprockets
   end
 
   if respond_to?(:register_transformer)
-    register_mime_type 'text/js-rollup', extensions: ['.rollup'], charset: :unicode
+    register_mime_type 'text/js-rollup', extensions: ['.es'], charset: :unicode
     register_transformer 'text/js-rollup', 'text/ecmascript-6', Rollup
     register_preprocessor 'text/js-rollup', DirectiveProcessor
   end
