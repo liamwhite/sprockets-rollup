@@ -67,7 +67,7 @@ module Sprockets
   end
   
   if respond_to?(:register_engine)
-    args = ['.rollup', Rollup]
+    args = ['.es', Rollup]
     args << { mime_type: 'text/js-rollup', silence_deprecation: true } if Sprockets::VERSION.start_with?("3")
     register_engine(*args)
   end
