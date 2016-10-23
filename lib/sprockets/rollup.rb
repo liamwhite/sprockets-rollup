@@ -55,20 +55,21 @@ module Sprockets
 
     def transform(input)
       path_to_rollup = File.join File.dirname(__FILE__), "rollup.js"
-      `node #{path_to_rollup} #{input[:filename].shellescape}`
+      path_to_buble  = File.join File.dirname(__FILE__), "buble.js"
+      `node #{path_to_rollup} #{input[:filename].shellescape} | node #{path_to_buble}`
     end
 
   end
 
   if respond_to?(:register_transformer)
-    register_mime_type 'text/js-rollup', extensions: ['.es'], charset: :unicode
-    register_transformer 'text/js-rollup', 'text/ecmascript-6', Rollup
-    register_preprocessor 'text/js-rollup', DirectiveProcessor
+    register_mime_type 'text/ecmascript-6', extensions: ['.es'], charset: :unicode
+    register_transformer 'text/ecmascript-6', 'application/javascript', Rollup
+    register_preprocessor 'text/ecmascript-6', DirectiveProcessor
   end
   
   if respond_to?(:register_engine)
     args = ['.es', Rollup]
-    args << { mime_type: 'text/js-rollup', silence_deprecation: true } if Sprockets::VERSION.start_with?("3")
+    args << { mime_type: 'text/ecmascript-6', silence_deprecation: true } if Sprockets::VERSION.start_with?("3")
     register_engine(*args)
   end
 
