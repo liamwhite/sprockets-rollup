@@ -54,9 +54,28 @@ module Sprockets
     end
 
     def transform(input)
+      compile(rollup(input))
+    end
+
+    def rollup(input)
       path_to_rollup = File.join File.dirname(__FILE__), "rollup.js"
+      output = `node #{path_to_rollup} #{input[:filename].shellescape}`
+      raise ArgumentError, output if $? != 0
+      output
+    end
+
+    def compile(input)
       path_to_buble  = File.join File.dirname(__FILE__), "buble.js"
-      `node #{path_to_rollup} #{input[:filename].shellescape} | node #{path_to_buble}`
+      output = nil
+
+      IO.popen(['node', path_to_buble], 'r+') do |pipe|
+        pipe.write(input)
+        pipe.close_write
+        output = pipe.read
+      end
+
+      raise ArgumentError, output if $? != 0
+      output
     end
 
   end
