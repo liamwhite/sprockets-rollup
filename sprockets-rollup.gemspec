@@ -2,7 +2,7 @@ $:.unshift File.expand_path("../lib", __FILE__)
 
 Gem::Specification.new do |s|
   s.name    = 'sprockets-rollup'
-  s.version = '0.4.1'
+  s.version = '0.4.2'
 
   s.summary     = "Sprockets Rollup"
   s.description = <<-EOS
