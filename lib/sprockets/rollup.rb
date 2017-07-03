@@ -60,8 +60,14 @@ module Sprockets
     def rollup(input)
       path_to_rollup = File.join File.dirname(__FILE__), "rollup.js"
       output = `node #{path_to_rollup} #{input[:filename].shellescape}`
+      output = JSON.parse(output)
       raise ArgumentError, output if $? != 0
-      output
+
+      # Declare rolled-up dependencies to Sprockets
+      output['dependencies'].each do |dep|
+        input[:metadata][:dependencies] << Sprockets::URIUtils.build_file_digest_uri(dep)
+      end
+      output['code']
     end
 
     def compile(input)
